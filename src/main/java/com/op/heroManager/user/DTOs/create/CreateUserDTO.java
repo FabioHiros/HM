@@ -32,5 +32,9 @@ public record CreateUserDTO(
     CreateAddressDTO address,
 
     @Valid // <--- CRITICAL: Tells Spring to validate every item in the list
-    List<CreatePhoneDTO> phones
+    List<CreatePhoneDTO> phones,
+
+    @NotBlank
+    @Size(min = 8, message = "Password must hava 8 a minimum of 8 characters")
+    String password
 ) {}

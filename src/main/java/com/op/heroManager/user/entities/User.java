@@ -35,7 +35,7 @@ public class User {
     private String name;
     private String age;
     private String email;
-    
+    private String password;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
