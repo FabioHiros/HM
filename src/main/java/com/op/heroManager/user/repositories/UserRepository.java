@@ -1,6 +1,7 @@
 package com.op.heroManager.user.repositories;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -21,4 +22,9 @@ public interface UserRepository extends JpaRepository<User,UUID> {
     // 2. Fetch Phones (Still manual to handle N+1 correctly)
     @Query("SELECT p.user.id as userId, p.number as number FROM phones p WHERE p.user.id IN :userIds")
     List<PhoneSummary> findPhoneSummaries(@Param("userIds") List<UUID> userIds);
+
+    // FIX: Solves N+1 Problem. 
+    // Fetches User + Phones in ONE query instead of (1 + N) queries.
+    @Query("SELECT u FROM users u LEFT JOIN FETCH u.phones WHERE u.id = :id")
+    Optional<User> findByIdWithPhones(@Param("id") UUID id);
 }

@@ -15,18 +15,21 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @RequiredArgsConstructor
 public class UserCreateService {
-    
 
     private final UserRepository userRepository;
     private final UserMapper mapper;
 
-
     public UserResponseDTO createUser(CreateUserDTO createDTO){
+        // 1. Convert DTO to Entity (Address and Phones are linked here by Mapper)
         User user = mapper.toEntity(createDTO);
 
+        // 2. Save
+        // The returned 'savedUser' is the persisted entity with the generated ID.
+        // It already holds the phone/address data in memory, so accessing them 
+        // in 'toResponse' will NOT trigger a database query.
         User savedUser = userRepository.save(user);
 
+        // 3. Return
         return mapper.toResponse(savedUser);
     }
-
 }
