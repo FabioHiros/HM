@@ -37,7 +37,7 @@ class UserServiceTest {
         User user = new User();
         user.setName("Fabio");
         user.setEmail("fabio@example.com");
-        user.setAge("30");
+        user.setAge(30);
         user.setRole(Role.USER);
 
         // Add Address

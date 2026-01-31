@@ -6,9 +6,11 @@ import com.op.heroManager.user.enums.Role;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+
 import jakarta.validation.constraints.Size;
 
 public record CreateUserDTO(
@@ -16,9 +18,11 @@ public record CreateUserDTO(
     @Size(min = 3, message = "Name must be at least 3 characters")
     String name,
 
-    @NotBlank(message = "Age is required")
-    @Pattern(regexp = "\\d+", message = "Age must be a number") // Validates String is numeric
-    String age,
+    
+    @NotNull(message = "age is required")
+    @Min(value = 18, message = "Must be 18 or older")
+    @Max(value = 130, message = "Age must be realistic")
+    Integer age,
 
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid email format")

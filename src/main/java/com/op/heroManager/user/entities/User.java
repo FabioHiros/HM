@@ -7,6 +7,7 @@ import java.util.UUID;
 import com.op.heroManager.user.enums.Role;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -25,7 +26,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity(name = "users")
-@Table(name = "users", indexes = @Index(name = "idx_user_name", columnList = "name"))
+@Table(name = "users", indexes = {
+    @Index(name = "idx_user_name", columnList = "name"),
+    @Index(name = "idx_user_email", columnList = "email")})
 public class User {
 
     @Id
@@ -33,7 +36,9 @@ public class User {
     private UUID id;
 
     private String name;
-    private String age;
+    private Integer age;
+
+    @Column(unique = true, nullable = false)
     private String email;
     private String password;
     @OneToOne(cascade = CascadeType.ALL)
@@ -46,6 +51,13 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Phone> phones = new ArrayList<>();
 
+    public void setAddress(Address address) {
+        this.address = address;
+        if (address != null) {
+            address.setUser(this);
+        }
+    }
+    
 
     public void addPhone(Phone phone) {
         phones.add(phone);
