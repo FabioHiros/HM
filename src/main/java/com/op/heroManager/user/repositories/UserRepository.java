@@ -23,6 +23,10 @@ public interface UserRepository extends JpaRepository<User,UUID> {
     @Query("SELECT p.user.id as userId, p.number as number FROM phones p WHERE p.user.id IN :userIds")
     List<PhoneSummary> findPhoneSummaries(@Param("userIds") List<UUID> userIds);
 
+    Optional<UserSummary> findByEmail(String email);
+
+    boolean existsByEmail(String email);
+
     // FIX: Solves N+1 Problem. 
     // Fetches User + Phones in ONE query instead of (1 + N) queries.
     @Query("SELECT u FROM users u LEFT JOIN FETCH u.phones WHERE u.id = :id")

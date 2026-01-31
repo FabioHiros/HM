@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.op.heroManager.user.DTOs.create.CreateUserDTO;
 import com.op.heroManager.user.DTOs.read.UserResponseDTO;
 import com.op.heroManager.user.entities.User;
+import com.op.heroManager.user.exceptions.UserAlreadyExistsException;
 import com.op.heroManager.user.mappers.UserMapper;
 import com.op.heroManager.user.repositories.UserRepository;
 
@@ -21,6 +22,10 @@ public class UserCreateService {
 
     public UserResponseDTO createUser(CreateUserDTO createDTO){
         // 1. Convert DTO to Entity (Address and Phones are linked here by Mapper)
+        if (userRepository.existsByEmail(createDTO.email())){
+            throw new UserAlreadyExistsException(createDTO.email());
+        }
+
         User user = mapper.toEntity(createDTO);
 
         // 2. Save
